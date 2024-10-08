@@ -58,7 +58,7 @@ const NestedList: React.FC = () => {
   const handleAddChild = (name: string) => {
     if (currentParent && name.trim() !== "") {
       const newChild: ListItem = {
-        id: Math.random().toString(36).substr(2, 9),
+        id: Math.random().toString(36).slice(2, 11),
         name,
         children: [],
       };

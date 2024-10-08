@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+const baseFontSize = 16;
+const pxToRem = (px: number) => `${px / baseFontSize}rem`;
+
 // Styles for NestedList component
 export const Container = styled.div`
   font-family: Arial, sans-serif;
@@ -20,52 +23,52 @@ export const ListContainer = styled.div`
 
 export const ListHeader = styled.div`
   display: grid;
-  grid-template-columns: 1fr 120px 120px;
-  gap: 10px;
-  padding: 10px 20px;
+  grid-template-columns: 1fr 7.5rem 7.5rem;
+  gap: ${pxToRem(10)};
+  padding: ${pxToRem(10)} ${pxToRem(20)};
   font-weight: bold;
   background-color: #2d2d2d;
-  border-bottom: 2px solid #4a4a4a;
+  border-bottom: ${pxToRem(2)} solid #4a4a4a;
 `;
 
 export const ScrollableList = styled.div`
   overflow-y: auto;
   flex-grow: 1;
-  padding: 0 20px;
+  padding: 0 ${pxToRem(20)};
 `;
 
 export const ListItemContainer = styled.div<{ level: number }>`
   display: grid;
-  grid-template-columns: 1fr 120px 120px;
-  gap: 10px;
+  grid-template-columns: 1fr 7.5rem 7.5rem;
+  gap: ${pxToRem(10)};
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #333;
+  padding: ${pxToRem(8)} 0;
+  border-bottom: ${pxToRem(1)} solid #333;
 `;
 
 export const ItemContent = styled.div<{ level: number }>`
   display: flex;
   align-items: center;
-  padding-left: ${(props) => props.level * 20}px;
+  padding-left: ${(props) => props.level * 1.25}rem;
   position: relative;
 
   &::before {
     content: "";
     position: absolute;
-    left: ${(props) => (props.level - 1) * 20 + 5}px;
+    left: ${(props) => (props.level - 1) * 1.25 + 0.3125}rem;
     top: 50%;
-    width: 10px;
-    height: 1px;
+    width: ${pxToRem(10)};
+    height: ${pxToRem(1)};
     background-color: #4a4a4a;
   }
 
   &::after {
     content: "";
     position: absolute;
-    left: ${(props) => (props.level - 1) * 20 + 5}px;
+    left: ${(props) => (props.level - 1) * 1.25 + 0.3125}rem;
     top: 0;
     bottom: 50%;
-    width: 1px;
+    width: ${pxToRem(1)};
     background-color: #4a4a4a;
   }
 `;
@@ -73,26 +76,6 @@ export const ItemContent = styled.div<{ level: number }>`
 export const ItemName = styled.span`
   font-weight: bold;
   color: #e0e0e0;
-`;
-
-export const Button = styled.button`
-  width: 100%;
-  padding: 5px 10px;
-  background-color: #2c5282;
-  color: #e0e0e0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  &:hover {
-    background-color: #3182ce;
-  }
-`;
-
-export const RemoveButton = styled(Button)`
-  background-color: #9b2c2c;
-  &:hover {
-    background-color: #c53030;
-  }
 `;
 
 // Styles for Modal component
@@ -110,10 +93,11 @@ export const ModalOverlay = styled.div`
 
 export const ModalContent = styled.div`
   background-color: #2d2d2d;
-  padding: 20px;
-  border-radius: 3px;
-  width: 300px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  padding: ${pxToRem(24)};
+  border-radius: ${pxToRem(4)};
+  width: ${pxToRem(400)};
+  max-width: 90%;
+  box-shadow: 0 0 ${pxToRem(10)} rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -121,10 +105,10 @@ export const ModalContent = styled.div`
 
 export const ModalTitle = styled.h2`
   margin-top: 0;
-  font-size: 18px;
+  font-size: ${pxToRem(20)};
   color: #e0e0e0;
   border-bottom: 1px solid #4a4a4a;
-  padding-bottom: 10px;
+  padding-bottom: ${pxToRem(12)};
   width: 100%;
   text-align: center;
 `;
@@ -133,16 +117,17 @@ export const InputContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: 15px;
+  margin-bottom: ${pxToRem(20)};
 `;
 
 export const Input = styled.input`
-  width: 90%;
-  padding: 8px;
+  width: 100%;
+  padding: ${pxToRem(10)};
   background-color: #1e1e1e;
   color: #e0e0e0;
   border: 1px solid #4a4a4a;
-  border-radius: 3px;
+  border-radius: ${pxToRem(4)};
+  font-size: ${pxToRem(16)};
 
   &:focus {
     outline: none;
@@ -152,12 +137,20 @@ export const Input = styled.input`
 
 export const ButtonGroup = styled.div`
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-end;
+  gap: ${pxToRem(12)};
   width: 100%;
 `;
 
-export const ModalButton = styled(Button)`
+export const BaseButton = styled.button`
+  padding: ${pxToRem(8)} ${pxToRem(16)};
+  color: #e0e0e0;
+  border: none;
+  border-radius: ${pxToRem(4)};
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: ${pxToRem(16)};
+
   &:disabled {
     background-color: #4a5568;
     cursor: not-allowed;

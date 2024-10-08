@@ -11,12 +11,13 @@ interface ButtonProps {
 const StyledButton = styled.button<{
   variant: "primary" | "secondary" | "danger";
 }>`
-  padding: 5px 10px;
+  padding: 0.5rem 1rem;
   color: #e0e0e0;
   border: none;
-  border-radius: 3px;
+  border-radius: 0.25rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  font-size: 1rem; // Задали размер шрифта
 
   ${({ variant }) => {
     switch (variant) {

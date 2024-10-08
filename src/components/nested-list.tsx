@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Modal from "./modal";
+import { saveToIndexedDB, loadFromIndexedDB } from "../utils/db";
 
 interface ListItem {
   id: string;
@@ -122,7 +123,8 @@ const RemoveButton = styled(Button)`
 `;
 
 const NestedList: React.FC = () => {
-  const [list, setList] = useState<ListItem>(initialList);
+  const [list, setList] = useState<ListItem | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [currentParent, setCurrentParent] = useState<ListItem | null>(null);
@@ -130,6 +132,21 @@ const NestedList: React.FC = () => {
     parent: ListItem;
     item: ListItem;
   } | null>(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const savedData = await loadFromIndexedDB("nestedListData");
+      setList(savedData || initialList);
+      setIsLoading(false);
+    };
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    if (list && !isLoading) {
+      saveToIndexedDB("nestedListData", list);
+    }
+  }, [list, isLoading]);
 
   const addChild = (parent: ListItem) => {
     setCurrentParent(parent);
@@ -144,7 +161,7 @@ const NestedList: React.FC = () => {
         children: [],
       };
       currentParent.children.push(newChild);
-      setList({ ...list });
+      setList({ ...list! });
     }
     setIsAddModalOpen(false);
   };
@@ -158,7 +175,7 @@ const NestedList: React.FC = () => {
     if (itemToDelete) {
       const { parent, item } = itemToDelete;
       parent.children = parent.children.filter((child) => child.id !== item.id);
-      setList({ ...list });
+      setList({ ...list! });
       setIsDeleteModalOpen(false);
       setItemToDelete(null);
     }
@@ -185,6 +202,10 @@ const NestedList: React.FC = () => {
     </React.Fragment>
   );
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Container>
       <ListContainer>
@@ -193,7 +214,7 @@ const NestedList: React.FC = () => {
           <div>Add Child</div>
           <div>Remove</div>
         </ListHeader>
-        <ScrollableList>{renderListItem(list, 0, null)}</ScrollableList>
+        <ScrollableList>{list && renderListItem(list, 0, null)}</ScrollableList>
       </ListContainer>
       <Modal
         isOpen={isAddModalOpen}

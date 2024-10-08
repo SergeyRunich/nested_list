@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 import styled from "styled-components";
 
 interface ModalProps {
@@ -28,6 +28,9 @@ const ModalContent = styled.div`
   border-radius: 3px;
   width: 300px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const ModalTitle = styled.h2`
@@ -79,7 +82,13 @@ const Modal: React.FC<ModalProps> = ({
   children,
   showInput = false,
 }) => {
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      setInputValue("");
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -89,7 +98,6 @@ const Modal: React.FC<ModalProps> = ({
     } else {
       (onSubmit as () => void)();
     }
-    setInputValue("");
     onClose();
   };
 
@@ -104,11 +112,15 @@ const Modal: React.FC<ModalProps> = ({
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder='Enter name'
+            autoFocus
           />
         )}
         <ButtonGroup>
           <Button onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSubmit} style={{ backgroundColor: "#2c5282" }}>
+          <Button
+            onClick={handleSubmit}
+            disabled={showInput && inputValue.trim() === ""}
+          >
             {showInput ? "Add" : "Confirm"}
           </Button>
         </ButtonGroup>
